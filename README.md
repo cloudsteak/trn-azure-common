@@ -37,3 +37,9 @@ Adatbázisok létrehozása, kezelése, csatlakozás.
 Konténerizáció, Docker tárolók létrehozása és kezelése.
 
 [Docker megoldások (Docker)](docker.md)
+
+## Mesterséges Intelligencia
+
+AI szolgáltatások, eszközök, modellek.
+
+Link: https://github.com/cloudsteak/trn-azure-ai
