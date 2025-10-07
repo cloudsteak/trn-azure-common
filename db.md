@@ -24,7 +24,7 @@ Az Azure Database for MySQL Flexible Server egy felügyelt adatbázis-szolgálta
 7. Kattints a "Felülvizsgálat + létrehozás" gombra.
 8. Ellenőrizd az összes megadott adatot, majd kattints a "Létrehozás" gombra a szerver létrehozásához.
 9. Várj, amíg a szerver létrejön. Ez eltarthat néhány percig.
-10. Tölts le a kapcsolódáshoz a tanúsítványt a Beállítások > Hálózatkezelés > SSL-tanúsítvány letöltése menüpont alatt. (https://dl.cacerts.digicert.com/DigiCertGlobalRootG2.crt.pem)
+10. Tölts le a kapcsolódáshoz a tanúsítványt a Beállítások > Hálózatkezelés > SSL-tanúsítvány letöltése menüpont alatt. (https://dl.cacerts.digicert.com/DigiCertGlobalRootG2.crt.pem) - https://learn.microsoft.com/hu-hu/azure/mysql/flexible-server/how-to-connect-tls-ssl#download-the-public-ssl-certificate
 
 ## Csatlakozás DBeaver segítségével
 
