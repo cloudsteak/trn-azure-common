@@ -42,6 +42,8 @@ runcmd:
   - systemctl enable nginx
 ```
 
+Külön fájlban itt is eléred: [cloud-config-nginx-webapp.yaml](./files/cloud-config-nginx-webapp.yaml).
+
 
 2. Apache webszerver egyedi index.html fájllal
 
@@ -65,3 +67,5 @@ runcmd:
   - chown www-data:www-data /var/www/html/index.html || true
   - chmod 0644 /var/www/html/index.html
 ```
+
+Külön fájlban itt is eléred: [cloud-config-apache-index-html.yaml](./files/cloud-config-apache-index-html.yaml).
