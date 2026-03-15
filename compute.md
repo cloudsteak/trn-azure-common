@@ -2,7 +2,6 @@
 
 Ebben a fejezetben áttekintjük az Azure virtuális gépeit és compute szolgáltatásait. Megismerheted, hogyan hozhatsz létre, kezelhetsz és méretezhetsz virtuális gépeket, valamint milyen lehetőségek állnak rendelkezésre számítási feladatok futtatására az Azure környezetben. A leírás segít eligazodni az alapvető fogalmakban és a legfontosabb szolgáltatásokban.
 
-
 ## Egyszerű Linux VM létrehozása Azure Portálon keresztül
 
 1. Jelentkezz be az [Azure Portal](https://portal.azure.com) felületére.
@@ -20,8 +19,25 @@ Ebben a fejezetben áttekintjük az Azure virtuális gépeit és compute szolgá
 
 Példa ssh parancsra:
 
+- Egyszerűen:
+
 ```bash
 ssh -i "nyilvanoskulcs.pem" felhasznalonev@ip-cim
+```
+
+- Ha a kulcs fájl helye és neve változóban van tárolva:
+
+```bash
+# Linux és macOS rendszereken a következő parancsokkal tudsz SSH-val kapcsolódni a virtuális géphez. Ne felejtsd el megadni a kulcs fájl helyét és nevét, valamint a virtuális gép nyilvános IP-címét.
+kulcs_fajl="kulcs fájl elértési útja és neve a pem kiterjesztéssel együtt"
+chmod 400 "$kulcs_fajl" 2>/dev/null || true
+ssh -i "$kulcs_fajl" azureuser@<a virtuális gép nyilvános IP-címe>
+```
+
+```powershell
+# Windows rendszeren a következő parancsot használhatod PowerShell-ben az SSH kapcsolódáshoz. Ne felejtsd el megadni a kulcs fájl helyét és nevét, valamint a virtuális gép nyilvános IP-címét.
+$kulcsFajl = "kulcs fájl elértési útja és neve a pem kiterjesztéssel együtt"
+ssh -i $kulcsFajl azureuser@<a virtulis gép nyilvános IP-címe>
 ```
 
 ## Egyéni adatok (Cloud-Init) használata Linux VM létrehozásakor
@@ -29,7 +45,6 @@ ssh -i "nyilvanoskulcs.pem" felhasznalonev@ip-cim
 Az egyéni adatok (custom data) segítségével automatizálhatod a virtuális gép inicializálását és konfigurálását a létrehozás során. Az Azure Linux VM-ek esetében a Cloud-Init egy népszerű eszköz, amely lehetővé teszi, hogy szkripteket és konfigurációs fájlokat adj meg, amelyek a VM első indításakor futnak le.
 
 1. Nginx webszerver
-
 
 ```yaml
 #cloud-config
@@ -44,7 +59,6 @@ runcmd:
 
 Külön fájlban itt is eléred: [cloud-config-nginx-webapp.yaml](./files/cloud-config-nginx-webapp.yaml).
 
-
 2. Apache webszerver egyedi index.html fájllal
 
 ```yaml
@@ -56,9 +70,9 @@ packages:
 
 write_files:
   - path: /tmp/index.html.tpl
-    permissions: '0644'
+    permissions: "0644"
     content: |
-      <html><head><style>body{font-family: Verdana, Geneva, Tahoma, sans-serif;background-image: url('https://github.com/cloudsteak/azurestaticwebsite/blob/main/assets/images/wallpaper-2025-01.jpeg?raw=true');background-repeat: no-repeat;background-size: cover; background-position: center;color: white; text-align: center; padding-top: 1%;}</style></head><body><h1>Web:<br>__HOSTNAME__</h1></body></html>
+      <html><head><style>body{font-family:Verdana,Geneva,Tahoma,sans-serif;margin:0;min-height:100vh;background:radial-gradient(circle at 20% 20%,#4cc9f0,#4361ee 35%,#3a0ca3 70%,#10002b);color:#fff;text-align:center;display:grid;place-items:center}</style></head><body><h1>Web:<br />__HOSTNAME__</h1></body></html>
 
 runcmd:
   - systemctl disable --now nginx || true
