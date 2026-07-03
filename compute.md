@@ -99,14 +99,14 @@ Az alábbi parancs segítségével generálhatsz CPU terhelést a Linux virtuál
 ```bash
 # Telepítsd a stress eszközt, ha még nincs telepítve
 sudo apt-get update
-sudo apt-get install -y stress
+sudo apt-get install -y stress-ng
 ```
 
 Használata:
 
 ```bash
 # Generálj CPU terhelést 4 szálon 120 másodpercig
-stress --cpu 4 --timeout 120
+stress-ng --cpu 4 --timeout 120s
 ```
 
 #### Memória terhelés generálása `stress` eszközzel
@@ -115,7 +115,7 @@ Az alábbi parancs segítségével generálhatsz memória terhelést a Linux vir
 
 ```bash
 # Generálj memória terhelést 1 GB méretben 120 másodpercig
-stress --vm 1 --vm-bytes 1G --timeout 120
+stress-ng --vm 1 --vm-bytes 1G --timeout 120s
 ```
 
 #### CPU és memória terhelés generálása egyszerre
@@ -124,7 +124,7 @@ Az alábbi parancs segítségével generálhatsz egyszerre CPU és memória terh
 
 ```bash
 # Generálj CPU terhelést 2 szálon és memória terhelést 512 MB méretben 120 másodpercig
-stress --cpu 2 --vm 1 --vm-bytes 512M --timeout 120
+stress-ng --cpu 2 --vm 1 --vm-bytes 512M --timeout 120s
 ```
 
 #### CPU terhelése bash script segítségével
