@@ -83,3 +83,121 @@ runcmd:
 ```
 
 Külön fájlban itt is eléred: [cloud-config-apache-index-html.yaml](./files/cloud-config-apache-index-html.yaml).
+
+## Virtuális gépek mesterséges terhelése
+
+Azure Monitor tanulásához és képességeinek teszteléséhez érdemes mesterséges terhelést generálni a virtuális gépeken. Ehhez több megoldás áll rendelkezünkre mind Linux, mind Windows rendszerek esetében. Az alábbiakban bemutatunk néhány lehetőséget.
+
+### Linux VM mesterséges terhelése
+
+Van erre dedikált eszköz és mutatok scripteket is, amelyekkel CPU, memória és hálózati terhelést generálhatsz.
+
+#### CPU terhelés generálása `stress` eszközzel
+
+Az alábbi parancs segítségével generálhatsz CPU terhelést a Linux virtuális gépen:
+
+```bash
+# Telepítsd a stress eszközt, ha még nincs telepítve
+sudo apt-get update
+sudo apt-get install -y stress
+```
+
+Használata:
+
+```bash
+# Generálj CPU terhelést 4 szálon 120 másodpercig
+stress --cpu 4 --timeout 120
+```
+
+#### Memória terhelés generálása `stress` eszközzel
+
+Az alábbi parancs segítségével generálhatsz memória terhelést a Linux virtuális gépen:
+
+```bash
+# Generálj memória terhelést 1 GB méretben 120 másodpercig
+stress --vm 1 --vm-bytes 1G --timeout 120
+```
+
+#### CPU és memória terhelés generálása egyszerre
+
+Az alábbi parancs segítségével generálhatsz egyszerre CPU és memória terhelést a Linux virtuális gépen:
+
+```bash
+# Generálj CPU terhelést 2 szálon és memória terhelést 512 MB méretben 120 másodpercig
+stress --cpu 2 --vm 1 --vm-bytes 512M --timeout 120
+```
+
+#### CPU terhelése bash script segítségével
+
+Az alábbi bash script segítségével generálhatsz CPU terhelést a Linux virtuális gépen. A script a megadott számú szálon futtatja a `yes` parancsot, amely folyamatosan számol, így terhelve a CPU-t.
+
+```bash
+#!/bin/bash
+# CPU terhelés generálása a megadott számú szálon
+# Használat: ./cpu_load.sh <szálak száma> <időtartam másodpercben>
+THREADS=${1:-2}  # Alapértelmezett 2 szál
+DURATION=${2:-60}  # Alapértelmezett 60 másodperc
+
+for i in $(seq 1 $THREADS); do
+    yes > /dev/null &
+done
+
+# Várakozás a megadott időtartamig
+sleep $DURATION
+
+# A háttérben futó folyamatok leállítása
+killall yes
+```
+
+### Windows VM mesterséges terhelése
+
+A Windows virtuális gépeken a mesterséges terhelés generálásához PowerShell scriptet használhatunk, amely CPU és memória terhelést hoz létre.
+
+#### CPU terhelés generálása PowerShell segítségével
+
+Az alábbi PowerShell script segítségével generálhatsz CPU terhelést a Windows virtuális gépen. A script a megadott számú szálon futtatja a `Start-Job` parancsot, amely folyamatosan számol, így terhelve a CPU-t.
+
+```powershell
+# CPU terhelés generálása a megadott számú szálon
+param (
+    [int]$Threads = 2,  # Alapértelmezett 2 szál
+    [int]$Duration = 60  # Alapértelmezett 60 másodperc
+)
+
+for ($i = 1; $i -le $Threads; $i++) {
+    Start-Job -ScriptBlock {
+        while ($true) {
+            [math]::Sqrt(12345) | Out-Null
+        }
+    }
+}
+
+# Várakozás a megadott időtartamig
+Start-Sleep -Seconds $Duration
+
+# A háttérben futó folyamatok leállítása
+Get-Job | Stop-Job | Remove-Job
+```
+
+#### Memória terhelés generálása PowerShell segítségével
+
+Az alábbi PowerShell script segítségével generálhatsz memória terhelést a Windows virtuális gépen. A script a megadott méretű byte tömböt hoz létre, amely folyamatosan foglalja a memóriát.
+
+```powershell
+# Memória terhelés generálása a megadott méretben
+param (
+    [int]$SizeMB = 512,  # Alapértelmezett 512 MB
+    [int]$Duration = 60   # Alapértelmezett 60 másodperc
+)
+
+$byteArray = New-Object byte[] ($SizeMB * 1MB)
+for ($i = 0; $i -lt $byteArray.Length; $i++) {
+    $byteArray[$i] = 0
+}
+
+# Várakozás a megadott időtartamig
+Start-Sleep -Seconds $Duration
+
+# A háttérben futó folyamatok leállítása
+Remove-Variable byteArray
+```
